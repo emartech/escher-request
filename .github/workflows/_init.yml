@@ -2,7 +2,6 @@ name: Initialize build
 
 on:
   workflow_call:
-
     outputs:
       NODE_VERSION:
         value: ${{ jobs.init.outputs.NODE_VERSION }}
