@@ -14,7 +14,7 @@
 
 - Go to <https://github.com/emartech/escher-request/compare>
 - Select your fork and branch as head
-- Select `emartech/escher-request` and `master` as base
+- Select `emartech/escher-request` and `main` as base
 
 ### 5. The code has to be approved and merged by a maintainer
 
