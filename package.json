@@ -44,7 +44,7 @@
     "@types/node": "20.19.25",
     "@types/sinon": "21.0.0",
     "@types/sinon-chai": "4.0.0",
-    "@typescript-eslint/parser": "8.48.0",
+    "@typescript-eslint/parser": "8.48.1",
     "chai": "6.2.1",
     "cross-env": "10.1.0",
     "eslint": "9.39.1",
