@@ -33,7 +33,7 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@emartech/json-logger": "^8.0.0",
+    "@emartech/json-logger": "^9.0.0",
     "axios": "^1.12.2",
     "axios-retry": "^4.5.0",
     "escher-auth": "^4.0.0"
