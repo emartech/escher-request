@@ -10,6 +10,9 @@ on:
         type: string
         required: true
 
+permissions:
+  contents: read
+
 jobs:
   test:
     name: Run tests
@@ -33,7 +36,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
         with:
-          node-version: '${{ inputs.NODE_VERSION }}'
+          node-version: ${{ inputs.NODE_VERSION }}
 
       - name: Run ${{ matrix.test }} test
         run: npm run ${{ matrix.test }}
