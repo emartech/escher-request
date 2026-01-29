@@ -28,7 +28,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
         with:
-          node-version: '${{ inputs.NODE_VERSION }}'
+          node-version: ${{ inputs.NODE_VERSION }}
 
       - name: Run build
         run: npm run build
@@ -37,4 +37,3 @@ jobs:
         run: npm run release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_PUBLISHER_TOKEN }}
