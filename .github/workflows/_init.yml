@@ -8,6 +8,9 @@ on:
       NODE_CACHE_KEY:
         value: ${{ jobs.init.outputs.NODE_CACHE_KEY }}
 
+permissions:
+  contents: read
+
 jobs:
   init:
     name: Initialize build
@@ -42,7 +45,7 @@ jobs:
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6
         with:
-          node-version: '${{ steps.node-version.outputs.NODE_VERSION }}'
+          node-version: ${{ steps.node-version.outputs.NODE_VERSION }}
 
       - name: Install dependencies
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
