@@ -1,3 +1,4 @@
+import { AxiosRequestHeaders } from 'axios';
 import { expect } from 'chai';
 import { EscherRequestError } from './requestError';
 
@@ -13,8 +14,9 @@ describe('EscherRequestError', function() {
       status: 200,
       statusText: 'OK',
       headers: {},
-      // @ts-ignore
-      config: {},
+      config: {
+        headers: {} as AxiosRequestHeaders
+      },
       data: {
         replyText: 'Too long',
         detailedMessage: 'Line too long'

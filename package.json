@@ -4,7 +4,8 @@
   "scripts": {
     "test": "mocha --require ts-node/register --extension ts ./src --recursive",
     "test:watch": "mocha --require ts-node/register --extension ts ./src --recursive --watch",
-    "lint": "cross-env ESLINT_USE_FLAT_CONFIG=false eslint ./src/**/*.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "build": "rimraf dist && tsc --project ./tsconfig.json",
     "release": "CI=true semantic-release"
   },
@@ -44,11 +45,9 @@
     "@types/node": "24.10.15",
     "@types/sinon": "21.0.0",
     "@types/sinon-chai": "4.0.0",
-    "@typescript-eslint/parser": "8.56.1",
     "chai": "6.2.2",
-    "cross-env": "10.1.0",
     "eslint": "9.39.3",
-    "eslint-config-emarsys": "5.1.0",
+    "eslint-plugin-chai-friendly": "1.1.0",
     "eslint-plugin-no-only-tests": "3.3.0",
     "eslint-plugin-security": "4.0.0",
     "mocha": "11.7.5",
@@ -58,6 +57,7 @@
     "sinon": "21.0.1",
     "sinon-chai": "4.0.1",
     "ts-node": "10.9.2",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.56.1"
   }
 }
