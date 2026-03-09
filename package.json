@@ -7,7 +7,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "build": "rimraf dist && tsc --project ./tsconfig.json",
-    "release": "CI=true semantic-release"
+    "release": "CI=true semantic-release",
+    "verify": "npm run lint && npm run test"
   },
   "publishConfig": {
     "access": "public"
@@ -40,6 +41,7 @@
     "escher-auth": "^4.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "10.0.1",
     "@types/chai": "5.2.3",
     "@types/mocha": "10.0.10",
     "@types/node": "24.10.15",
