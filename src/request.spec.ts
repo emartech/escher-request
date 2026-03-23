@@ -210,4 +210,168 @@ describe('EscherRequest', function() {
     expect(response.statusCode).to.eql(200);
     expect(response.body).to.eql({ data: 1 });
   });
+
+  describe('proxy support', function() {
+    let originalHttpProxy: string | undefined;
+    let originalHttpsProxy: string | undefined;
+    let originalNoProxy: string | undefined;
+
+    beforeEach(function() {
+      originalHttpProxy = process.env.HTTP_PROXY;
+      originalHttpsProxy = process.env.HTTPS_PROXY;
+      originalNoProxy = process.env.NO_PROXY;
+    });
+
+    afterEach(function() {
+      if (originalHttpProxy) {
+        process.env.HTTP_PROXY = originalHttpProxy;
+      } else {
+        delete process.env.HTTP_PROXY;
+      }
+      if (originalHttpsProxy) {
+        process.env.HTTPS_PROXY = originalHttpsProxy;
+      } else {
+        delete process.env.HTTPS_PROXY;
+      }
+      if (originalNoProxy) {
+        process.env.NO_PROXY = originalNoProxy;
+      } else {
+        delete process.env.NO_PROXY;
+      }
+    });
+
+    it('should create proxy agents when HTTPS_PROXY environment variable is set', function() {
+      process.env.HTTPS_PROXY = 'http://proxy.example.com:8080';
+      requestOptions = new EscherRequestOption(serviceConfig.host, serviceConfig);
+      escherRequest = EscherRequest.create('key-id', 'secret', requestOptions);
+
+      expect(escherRequest.httpAgent).to.exist;
+      expect(escherRequest.httpsAgent).to.exist;
+    });
+
+    it('should create proxy agents when HTTP_PROXY environment variable is set for insecure connections', function() {
+      process.env.HTTP_PROXY = 'http://proxy.example.com:8080';
+      const insecureConfig = { ...serviceConfig, secure: false };
+      requestOptions = new EscherRequestOption(serviceConfig.host, insecureConfig);
+      escherRequest = EscherRequest.create('key-id', 'secret', requestOptions);
+
+      expect(escherRequest.httpAgent).to.exist;
+      expect(escherRequest.httpsAgent).to.exist;
+    });
+
+    it('should create proxy agents when proxy option is explicitly set', function() {
+      const configWithProxy = { ...serviceConfig, proxy: 'http://explicit-proxy.example.com:3128' };
+      requestOptions = new EscherRequestOption(serviceConfig.host, configWithProxy);
+      escherRequest = EscherRequest.create('key-id', 'secret', requestOptions);
+
+      expect(escherRequest.httpAgent).to.exist;
+      expect(escherRequest.httpsAgent).to.exist;
+    });
+
+    it('should prioritize explicit proxy option over environment variables', function() {
+      process.env.HTTPS_PROXY = 'http://env-proxy.example.com:8080';
+      const configWithProxy = { ...serviceConfig, proxy: 'http://explicit-proxy.example.com:3128' };
+      requestOptions = new EscherRequestOption(serviceConfig.host, configWithProxy);
+      escherRequest = EscherRequest.create('key-id', 'secret', requestOptions);
+
+      expect(escherRequest.httpAgent).to.exist;
+      expect(escherRequest.httpsAgent).to.exist;
+    });
+
+    it('should not create proxy agents when no proxy is configured', function() {
+      delete process.env.HTTP_PROXY;
+      delete process.env.HTTPS_PROXY;
+      const configWithoutKeepAlive = { ...serviceConfig, keepAlive: false };
+      requestOptions = new EscherRequestOption(serviceConfig.host, configWithoutKeepAlive);
+      escherRequest = EscherRequest.create('key-id', 'secret', requestOptions);
+
+      expect(escherRequest.httpAgent).to.be.undefined;
+      expect(escherRequest.httpsAgent).to.be.undefined;
+    });
+
+    it('should combine proxy and keepAlive settings', function() {
+      process.env.HTTPS_PROXY = 'http://proxy.example.com:8080';
+      const configWithKeepAlive = { ...serviceConfig, keepAlive: true };
+      requestOptions = new EscherRequestOption(serviceConfig.host, configWithKeepAlive);
+      escherRequest = EscherRequest.create('key-id', 'secret', requestOptions);
+
+      expect(escherRequest.httpAgent).to.exist;
+      expect(escherRequest.httpsAgent).to.exist;
+    });
+
+    it('should support lowercase environment variables', function() {
+      process.env.https_proxy = 'http://proxy.example.com:8080';
+      requestOptions = new EscherRequestOption(serviceConfig.host, serviceConfig);
+      escherRequest = EscherRequest.create('key-id', 'secret', requestOptions);
+
+      expect(escherRequest.httpAgent).to.exist;
+      expect(escherRequest.httpsAgent).to.exist;
+
+      delete process.env.https_proxy;
+    });
+
+    it('should respect NO_PROXY environment variable for exact host match', function() {
+      process.env.HTTPS_PROXY = 'http://proxy.example.com:8080';
+      process.env.NO_PROXY = 'localhost';
+      requestOptions = new EscherRequestOption(serviceConfig.host, serviceConfig);
+      escherRequest = EscherRequest.create('key-id', 'secret', requestOptions);
+
+      expect(escherRequest.httpAgent).to.be.undefined;
+      expect(escherRequest.httpsAgent).to.be.undefined;
+    });
+
+    it('should respect NO_PROXY environment variable with wildcard', function() {
+      process.env.HTTPS_PROXY = 'http://proxy.example.com:8080';
+      process.env.NO_PROXY = '*.local,localhost,.internal.example.com';
+      requestOptions = new EscherRequestOption(serviceConfig.host, serviceConfig);
+      escherRequest = EscherRequest.create('key-id', 'secret', requestOptions);
+
+      expect(escherRequest.httpAgent).to.be.undefined;
+      expect(escherRequest.httpsAgent).to.be.undefined;
+    });
+
+    it('should use proxy when host is not in NO_PROXY', function() {
+      process.env.HTTPS_PROXY = 'http://proxy.example.com:8080';
+      process.env.NO_PROXY = 'other.host.com';
+      requestOptions = new EscherRequestOption(serviceConfig.host, serviceConfig);
+      escherRequest = EscherRequest.create('key-id', 'secret', requestOptions);
+
+      expect(escherRequest.httpAgent).to.exist;
+      expect(escherRequest.httpsAgent).to.exist;
+    });
+
+    it('should respect no_proxy (lowercase) environment variable', function() {
+      process.env.HTTPS_PROXY = 'http://proxy.example.com:8080';
+      process.env.no_proxy = 'localhost';
+      requestOptions = new EscherRequestOption(serviceConfig.host, serviceConfig);
+      escherRequest = EscherRequest.create('key-id', 'secret', requestOptions);
+
+      expect(escherRequest.httpAgent).to.be.undefined;
+      expect(escherRequest.httpsAgent).to.be.undefined;
+
+      delete process.env.no_proxy;
+    });
+
+    it('should respect NO_PROXY with non-standard port', function() {
+      process.env.HTTPS_PROXY = 'http://proxy.example.com:8080';
+      process.env.NO_PROXY = 'localhost';
+      const configWithNonStandardPort = { ...serviceConfig, port: 8443 };
+      requestOptions = new EscherRequestOption(serviceConfig.host, configWithNonStandardPort);
+      escherRequest = EscherRequest.create('key-id', 'secret', requestOptions);
+
+      expect(escherRequest.httpAgent).to.be.undefined;
+      expect(escherRequest.httpsAgent).to.be.undefined;
+    });
+
+    it('should use proxy with non-standard port when host not in NO_PROXY', function() {
+      process.env.HTTPS_PROXY = 'http://proxy.example.com:8080';
+      process.env.NO_PROXY = 'other.host.com';
+      const configWithNonStandardPort = { ...serviceConfig, port: 8443 };
+      requestOptions = new EscherRequestOption(serviceConfig.host, configWithNonStandardPort);
+      escherRequest = EscherRequest.create('key-id', 'secret', requestOptions);
+
+      expect(escherRequest.httpAgent).to.exist;
+      expect(escherRequest.httpsAgent).to.exist;
+    });
+  });
 });
