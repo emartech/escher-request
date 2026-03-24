@@ -39,8 +39,8 @@
     "axios": "^1.13.5",
     "axios-retry": "^4.5.0",
     "escher-auth": "^4.0.0",
-    "http-proxy-agent": "^5.0.0",
-    "https-proxy-agent": "^5.0.1",
+    "http-proxy-agent": "^7.0.0",
+    "https-proxy-agent": "^7.0.0",
     "proxy-from-env": "^2.1.0"
   },
   "devDependencies": {
