@@ -247,6 +247,9 @@ describe('EscherRequest', function() {
 
       expect(escherRequest.httpAgent).to.exist;
       expect(escherRequest.httpsAgent).to.exist;
+      
+      expect(escherRequest.httpAgent?.constructor.name).to.equal('HttpProxyAgent');
+      expect(escherRequest.httpsAgent?.constructor.name).to.equal('HttpsProxyAgent');
     });
 
     it('should create proxy agents when HTTP_PROXY environment variable is set for insecure connections', function() {
@@ -257,6 +260,9 @@ describe('EscherRequest', function() {
 
       expect(escherRequest.httpAgent).to.exist;
       expect(escherRequest.httpsAgent).to.exist;
+
+      expect(escherRequest.httpAgent?.constructor.name).to.equal('HttpProxyAgent');
+      expect(escherRequest.httpsAgent?.constructor.name).to.equal('HttpsProxyAgent');
     });
 
     it('should create proxy agents when proxy option is explicitly set', function() {
@@ -266,6 +272,9 @@ describe('EscherRequest', function() {
 
       expect(escherRequest.httpAgent).to.exist;
       expect(escherRequest.httpsAgent).to.exist;
+
+      expect(escherRequest.httpAgent?.constructor.name).to.equal('HttpProxyAgent');
+      expect(escherRequest.httpsAgent?.constructor.name).to.equal('HttpsProxyAgent');
     });
 
     it('should prioritize explicit proxy option over environment variables', function() {
@@ -276,6 +285,9 @@ describe('EscherRequest', function() {
 
       expect(escherRequest.httpAgent).to.exist;
       expect(escherRequest.httpsAgent).to.exist;
+
+      expect(escherRequest.httpAgent?.constructor.name).to.equal('HttpProxyAgent');
+      expect(escherRequest.httpsAgent?.constructor.name).to.equal('HttpsProxyAgent');
     });
 
     it('should not create proxy agents when no proxy is configured', function() {
@@ -297,6 +309,9 @@ describe('EscherRequest', function() {
 
       expect(escherRequest.httpAgent).to.exist;
       expect(escherRequest.httpsAgent).to.exist;
+
+      expect(escherRequest.httpAgent?.constructor.name).to.equal('HttpProxyAgent');
+      expect(escherRequest.httpsAgent?.constructor.name).to.equal('HttpsProxyAgent');
     });
 
     it('should support lowercase environment variables', function() {
@@ -306,6 +321,9 @@ describe('EscherRequest', function() {
 
       expect(escherRequest.httpAgent).to.exist;
       expect(escherRequest.httpsAgent).to.exist;
+
+      expect(escherRequest.httpAgent?.constructor.name).to.equal('HttpProxyAgent');
+      expect(escherRequest.httpsAgent?.constructor.name).to.equal('HttpsProxyAgent');
 
       delete process.env.https_proxy;
     });
@@ -338,6 +356,9 @@ describe('EscherRequest', function() {
 
       expect(escherRequest.httpAgent).to.exist;
       expect(escherRequest.httpsAgent).to.exist;
+
+      expect(escherRequest.httpAgent?.constructor.name).to.equal('HttpProxyAgent');
+      expect(escherRequest.httpsAgent?.constructor.name).to.equal('HttpsProxyAgent');
     });
 
     it('should respect no_proxy (lowercase) environment variable', function() {
@@ -372,6 +393,9 @@ describe('EscherRequest', function() {
 
       expect(escherRequest.httpAgent).to.exist;
       expect(escherRequest.httpsAgent).to.exist;
+
+      expect(escherRequest.httpAgent?.constructor.name).to.equal('HttpProxyAgent');
+      expect(escherRequest.httpsAgent?.constructor.name).to.equal('HttpsProxyAgent');
     });
   });
 });
