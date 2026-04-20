@@ -1,9 +1,9 @@
 const Escher = require('escher-auth');
 import { Agent as HttpAgent } from 'http';
 import { Agent as HttpsAgent } from 'https';
-const { HttpProxyAgent } = require('http-proxy-agent');
-const { HttpsProxyAgent } = require('https-proxy-agent');
-const { getProxyForUrl } = require('proxy-from-env');
+import { HttpProxyAgent } from 'http-proxy-agent';
+import { HttpsProxyAgent } from 'https-proxy-agent';
+import { getProxyForUrl } from 'proxy-from-env';
 import { EscherRequestOption } from './requestOption';
 export { EscherRequestOption } from './requestOption';
 import { RequestWrapper, ExtendedRequestOption, TransformedResponse } from './wrapper';
