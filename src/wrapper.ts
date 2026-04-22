@@ -67,7 +67,8 @@ export class RequestWrapper {
       timeout: reqOptions.timeout,
       transformResponse: [body => body],
       maxContentLength: this.requestOptions.maxContentLength,
-      cancelToken: source.token
+      cancelToken: source.token,
+      proxy: false
     };
 
     if (this.requestOptions.httpAgent && this.requestOptions.httpsAgent) {

@@ -1,6 +1,9 @@
 const Escher = require('escher-auth');
 import { Agent as HttpAgent } from 'http';
 import { Agent as HttpsAgent } from 'https';
+import { HttpProxyAgent } from 'http-proxy-agent';
+import { HttpsProxyAgent } from 'https-proxy-agent';
+import { getProxyForUrl } from 'proxy-from-env';
 import { EscherRequestOption } from './requestOption';
 export { EscherRequestOption } from './requestOption';
 import { RequestWrapper, ExtendedRequestOption, TransformedResponse } from './wrapper';
@@ -36,10 +39,36 @@ export class EscherRequest {
     this.escher = new Escher(escherConfig);
     this.options = requestOptions;
 
-    if (requestOptions.keepAlive) {
+    const proxyUrl = this.getProxyUrl(requestOptions);
+
+    if (proxyUrl) {
+      this.httpAgent = new HttpProxyAgent(proxyUrl, { keepAlive: requestOptions.keepAlive });
+      this.httpsAgent = new HttpsProxyAgent(proxyUrl, { keepAlive: requestOptions.keepAlive });
+    } else if (requestOptions.keepAlive) {
       this.httpAgent = new HttpAgent({ keepAlive: true });
       this.httpsAgent = new HttpsAgent({ keepAlive: true });
     }
+  }
+
+  private getProxyUrl(requestOptions: EscherRequestOption): string | undefined {
+    if (requestOptions.proxy) {
+      return requestOptions.proxy;
+    }
+
+    // Build the target URL to check against NO_PROXY
+    const protocol = requestOptions.secure ? 'https:' : 'http:';
+    const port = requestOptions.port;
+    const defaultPort = requestOptions.secure ? 443 : 80;
+
+    // Only include port in URL if it's non-standard
+    const hostWithPort = port === defaultPort
+      ? requestOptions.host
+      : `${requestOptions.host}:${port}`;
+
+    const targetUrl = `${protocol}//${hostWithPort}`;
+
+    // Use proxy-from-env to respect NO_PROXY and other proxy env vars
+    return getProxyForUrl(targetUrl);
   }
 
   public get<T = any>(path: string, data?: any): Promise<TransformedResponse<T>> {
