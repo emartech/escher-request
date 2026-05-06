@@ -156,8 +156,8 @@ export class RequestWrapper {
   }
 
   private isJsonResponse<T extends TransformedResponse | AxiosResponse>(response: T) {
-    return response.headers['content-type'] &&
-      response.headers['content-type'].indexOf('application/json') !== -1;
+    return typeof response.headers['content-type'] === 'string'
+      && response.headers['content-type'].includes('application/json');
   }
 
   private getLogParameters(extraParametersToLog = {}) {
