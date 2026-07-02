@@ -1,6 +1,7 @@
 import axios, { CancelToken } from 'axios';
 import http from 'http';
 import https from 'https';
+import { afterEach, beforeEach, describe, it } from 'mocha';
 import sinon, { SinonStub } from 'sinon';
 import { expect } from 'chai';
 import { ExtendedRequestOption, RequestWrapper } from './wrapper';
