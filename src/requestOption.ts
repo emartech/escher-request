@@ -15,6 +15,7 @@ export interface RequestOptions {
   keepAlive?: boolean;
   credentialScope?: string;
   retryConfig?: IAxiosRetryConfig | null;
+  proxy?: string;
 }
 
 export class EscherRequestOption implements RequestOptions {
@@ -30,6 +31,7 @@ export class EscherRequestOption implements RequestOptions {
   keepAlive = false;
   credentialScope = '';
   retryConfig: IAxiosRetryConfig | null = null;
+  proxy?: string;
 
   public static createForInternalApi(host: string | RequestOptions, rejectUnauthorized: boolean) {
     return this.create(host, '/api/v2/internal', rejectUnauthorized);
