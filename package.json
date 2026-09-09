@@ -48,18 +48,18 @@
     "@types/sinon": "22.0.0",
     "@types/sinon-chai": "4.0.0",
     "chai": "6.2.2",
-    "eslint": "10.8.0",
+    "eslint": "10.10.0",
     "eslint-plugin-chai-friendly": "1.2.1",
     "eslint-plugin-no-only-tests": "3.4.0",
     "eslint-plugin-security": "4.0.1",
-    "mocha": "11.7.6",
+    "mocha": "11.8.0",
     "nock": "14.0.17",
     "rimraf": "6.1.3",
-    "semantic-release": "25.0.8",
+    "semantic-release": "25.0.9",
     "sinon": "22.1.0",
     "sinon-chai": "4.0.1",
     "ts-node": "10.9.2",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.65.0"
+    "typescript-eslint": "8.69.0"
   }
 }
