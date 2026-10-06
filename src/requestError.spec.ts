@@ -1,5 +1,6 @@
 import { AxiosRequestHeaders } from 'axios';
 import { expect } from 'chai';
+import { describe, it } from 'mocha';
 import { EscherRequestError } from './requestError';
 
 describe('EscherRequestError', function() {
