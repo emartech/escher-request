@@ -5,26 +5,17 @@
     "summarize": {
       "auto_generate_summary": true,
       "auto_insert_summary": true,
-      "auto_run_on_draft_pr": true,
-      "use_custom_summarize_prompt": false,
-      "use_custom_summarize_output_template": false,
-      "excluded_paths": [],
-      "auto_exclude_authors": []
+      "auto_run_on_draft_pr": true
     },
     "review": {
       "auto_generate_review": true,
-      "auto_run_on_draft_pr": false,
-      "use_custom_review_focus": false,
-      "excluded_paths": [],
-      "auto_exclude_authors": []
+      "auto_run_on_draft_pr": false
     },
     "sonar_fix": {
-      "enable": true,
-      "excluded_rules": []
+      "enable": true
     },
     "pipeline_fix": {
       "enable": true
     }
-  },
-  "excluded_paths": []
+  }
 }
